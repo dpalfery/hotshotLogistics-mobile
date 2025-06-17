@@ -1,0 +1,139 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\dave\\bolt-hotshot-logistics\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{2B894B61-9E83-7CA3-DBCA-EDA1F6E7B2B2}|4-Persistence\\HotshotLogistics.Data\\HotshotLogistics.Data.csproj|c:\\users\\dave\\bolt-hotshot-logistics\\4-persistence\\hotshotlogistics.data\\hotshotdbcontextfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B894B61-9E83-7CA3-DBCA-EDA1F6E7B2B2}|4-Persistence\\HotshotLogistics.Data\\HotshotLogistics.Data.csproj|solutionrelative:4-persistence\\hotshotlogistics.data\\hotshotdbcontextfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B894B61-9E83-7CA3-DBCA-EDA1F6E7B2B2}|4-Persistence\\HotshotLogistics.Data\\HotshotLogistics.Data.csproj|c:\\users\\dave\\bolt-hotshot-logistics\\4-persistence\\hotshotlogistics.data\\hotshotdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B894B61-9E83-7CA3-DBCA-EDA1F6E7B2B2}|4-Persistence\\HotshotLogistics.Data\\HotshotLogistics.Data.csproj|solutionrelative:4-persistence\\hotshotlogistics.data\\hotshotdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CBB9CB9-2018-4F94-A580-0F9F7F382F1D}|3-Domain\\HotshotLogistics.Contracts\\HotshotLogistics.Contracts.csproj|c:\\users\\dave\\bolt-hotshot-logistics\\3-domain\\hotshotlogistics.contracts\\models\\jobdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CBB9CB9-2018-4F94-A580-0F9F7F382F1D}|3-Domain\\HotshotLogistics.Contracts\\HotshotLogistics.Contracts.csproj|solutionrelative:3-domain\\hotshotlogistics.contracts\\models\\jobdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CBB9CB9-2018-4F94-A580-0F9F7F382F1D}|3-Domain\\HotshotLogistics.Contracts\\HotshotLogistics.Contracts.csproj|c:\\users\\dave\\bolt-hotshot-logistics\\3-domain\\hotshotlogistics.contracts\\models\\ijob.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CBB9CB9-2018-4F94-A580-0F9F7F382F1D}|3-Domain\\HotshotLogistics.Contracts\\HotshotLogistics.Contracts.csproj|solutionrelative:3-domain\\hotshotlogistics.contracts\\models\\ijob.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{14859889-016F-467A-8866-47205BF6640D}|3-Domain\\HotshotLogistics.Domain\\HotshotLogistics.Domain.csproj|c:\\users\\dave\\bolt-hotshot-logistics\\3-domain\\hotshotlogistics.domain\\models\\job.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{14859889-016F-467A-8866-47205BF6640D}|3-Domain\\HotshotLogistics.Domain\\HotshotLogistics.Domain.csproj|solutionrelative:3-domain\\hotshotlogistics.domain\\models\\job.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{14859889-016F-467A-8866-47205BF6640D}|3-Domain\\HotshotLogistics.Domain\\HotshotLogistics.Domain.csproj|c:\\users\\dave\\bolt-hotshot-logistics\\3-domain\\hotshotlogistics.domain\\models\\driver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{14859889-016F-467A-8866-47205BF6640D}|3-Domain\\HotshotLogistics.Domain\\HotshotLogistics.Domain.csproj|solutionrelative:3-domain\\hotshotlogistics.domain\\models\\driver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{14859889-016F-467A-8866-47205BF6640D}|3-Domain\\HotshotLogistics.Domain\\HotshotLogistics.Domain.csproj|c:\\users\\dave\\bolt-hotshot-logistics\\3-domain\\hotshotlogistics.domain\\enums\\jobpriority.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{14859889-016F-467A-8866-47205BF6640D}|3-Domain\\HotshotLogistics.Domain\\HotshotLogistics.Domain.csproj|solutionrelative:3-domain\\hotshotlogistics.domain\\enums\\jobpriority.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "HotshotDbContextFactory.cs",
+              "DocumentMoniker": "C:\\Users\\dave\\bolt-hotshot-logistics\\4-Persistence\\HotshotLogistics.Data\\HotshotDbContextFactory.cs",
+              "RelativeDocumentMoniker": "4-Persistence\\HotshotLogistics.Data\\HotshotDbContextFactory.cs",
+              "ToolTip": "C:\\Users\\dave\\bolt-hotshot-logistics\\4-Persistence\\HotshotLogistics.Data\\HotshotDbContextFactory.cs",
+              "RelativeToolTip": "4-Persistence\\HotshotLogistics.Data\\HotshotDbContextFactory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAABLAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-15T04:29:48.009Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "HotshotDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\dave\\bolt-hotshot-logistics\\4-Persistence\\HotshotLogistics.Data\\HotshotDbContext.cs",
+              "RelativeDocumentMoniker": "4-Persistence\\HotshotLogistics.Data\\HotshotDbContext.cs",
+              "ToolTip": "C:\\Users\\dave\\bolt-hotshot-logistics\\4-Persistence\\HotshotLogistics.Data\\HotshotDbContext.cs",
+              "RelativeToolTip": "4-Persistence\\HotshotLogistics.Data\\HotshotDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-15T04:29:23.508Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "JobDto.cs",
+              "DocumentMoniker": "C:\\Users\\dave\\bolt-hotshot-logistics\\3-Domain\\HotshotLogistics.Contracts\\Models\\JobDto.cs",
+              "RelativeDocumentMoniker": "3-Domain\\HotshotLogistics.Contracts\\Models\\JobDto.cs",
+              "ToolTip": "C:\\Users\\dave\\bolt-hotshot-logistics\\3-Domain\\HotshotLogistics.Contracts\\Models\\JobDto.cs",
+              "RelativeToolTip": "3-Domain\\HotshotLogistics.Contracts\\Models\\JobDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-15T04:17:06.986Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Driver.cs",
+              "DocumentMoniker": "C:\\Users\\dave\\bolt-hotshot-logistics\\3-Domain\\HotshotLogistics.Domain\\Models\\Driver.cs",
+              "RelativeDocumentMoniker": "3-Domain\\HotshotLogistics.Domain\\Models\\Driver.cs",
+              "ToolTip": "C:\\Users\\dave\\bolt-hotshot-logistics\\3-Domain\\HotshotLogistics.Domain\\Models\\Driver.cs",
+              "RelativeToolTip": "3-Domain\\HotshotLogistics.Domain\\Models\\Driver.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-15T02:07:37.67Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Job.cs",
+              "DocumentMoniker": "C:\\Users\\dave\\bolt-hotshot-logistics\\3-Domain\\HotshotLogistics.Domain\\Models\\Job.cs",
+              "RelativeDocumentMoniker": "3-Domain\\HotshotLogistics.Domain\\Models\\Job.cs",
+              "ToolTip": "C:\\Users\\dave\\bolt-hotshot-logistics\\3-Domain\\HotshotLogistics.Domain\\Models\\Job.cs",
+              "RelativeToolTip": "3-Domain\\HotshotLogistics.Domain\\Models\\Job.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-15T02:07:30.947Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "JobPriority.cs",
+              "DocumentMoniker": "C:\\Users\\dave\\bolt-hotshot-logistics\\3-Domain\\HotshotLogistics.Domain\\Enums\\JobPriority.cs",
+              "RelativeDocumentMoniker": "3-Domain\\HotshotLogistics.Domain\\Enums\\JobPriority.cs",
+              "ToolTip": "C:\\Users\\dave\\bolt-hotshot-logistics\\3-Domain\\HotshotLogistics.Domain\\Enums\\JobPriority.cs",
+              "RelativeToolTip": "3-Domain\\HotshotLogistics.Domain\\Enums\\JobPriority.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-15T02:06:30.25Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "IJob.cs",
+              "DocumentMoniker": "C:\\Users\\dave\\bolt-hotshot-logistics\\3-Domain\\HotshotLogistics.Contracts\\Models\\IJob.cs",
+              "RelativeDocumentMoniker": "3-Domain\\HotshotLogistics.Contracts\\Models\\IJob.cs",
+              "ToolTip": "C:\\Users\\dave\\bolt-hotshot-logistics\\3-Domain\\HotshotLogistics.Contracts\\Models\\IJob.cs",
+              "RelativeToolTip": "3-Domain\\HotshotLogistics.Contracts\\Models\\IJob.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-15T02:03:34.172Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

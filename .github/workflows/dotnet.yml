@@ -1,0 +1,45 @@
+name: .NET CI
+
+on:
+  push:
+    paths:
+      - '**/*.cs'
+      - '**/*.csproj'
+      - '.github/workflows/**'
+  pull_request:
+    paths:
+      - '**/*.cs'
+      - '**/*.csproj'
+      - '.github/workflows/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Restore
+        run: |
+          for proj in $(find . -name '*.csproj'); do
+            dotnet restore "$proj"
+          done
+      - name: Install formatter
+        run: dotnet tool update -g dotnet-format
+      - name: Lint
+        run: |
+          export PATH="$HOME/.dotnet/tools:$PATH"
+          for proj in $(find . -name '*.csproj'); do
+            dotnet format "$proj" --verify-no-changes --no-restore
+          done
+      - name: Build
+        run: |
+          for proj in $(find . -name '*.csproj'); do
+            dotnet build "$proj" --configuration Release --no-restore
+          done
+      - name: Test
+        run: |
+          for proj in $(find ./5-Test -name '*.csproj'); do
+            dotnet test "$proj" --no-build --configuration Release
+          done
