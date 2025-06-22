@@ -9,12 +9,13 @@ import {
   Alert 
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Settings, Star, Truck, CreditCard, Bell, CircleHelp as HelpCircle, LogOut, CreditCard as Edit, Shield, FileText } from 'lucide-react-native';
+import { router } from 'expo-router';
+import { Settings, Star, Truck, CreditCard, Bell, CircleHelp as HelpCircle, LogOut, Edit, Shield, FileText } from 'lucide-react-native';
 import { mockDriver } from '@/data/mockDriver';
 
 export default function ProfileScreen() {
   const handleEditProfile = () => {
-    Alert.alert('Edit Profile', 'Profile editing functionality would be implemented here.');
+    router.push('/edit-profile');
   };
 
   const handlePaymentSettings = () => {
