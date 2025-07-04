@@ -10,23 +10,35 @@ interface AuthRequest extends Request {
   };
 }
 
-export const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction) => {
+export const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction): void => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
-    return res.status(401).json({
+    res.status(401).json({
       success: false,
       error: 'Access token required'
     } as ApiResponse);
+    return;
   }
 
-  jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret', (err, decoded: any) => {
+  const jwtSecret = process.env.JWT_SECRET;
+  if (!jwtSecret) {
+    console.error('JWT_SECRET environment variable is not set');
+    res.status(500).json({
+      success: false,
+      error: 'Server configuration error'
+    } as ApiResponse);
+    return;
+  }
+
+  jwt.verify(token, jwtSecret, (err, decoded: any) => {
     if (err) {
-      return res.status(403).json({
+      res.status(403).json({
         success: false,
         error: 'Invalid or expired token'
       } as ApiResponse);
+      return;
     }
 
     req.user = decoded;
@@ -35,19 +47,21 @@ export const authenticateToken = (req: AuthRequest, res: Response, next: NextFun
 };
 
 export const requireRole = (roles: string[]) => {
-  return (req: AuthRequest, res: Response, next: NextFunction) => {
+  return (req: AuthRequest, res: Response, next: NextFunction): void => {
     if (!req.user) {
-      return res.status(401).json({
+      res.status(401).json({
         success: false,
         error: 'Authentication required'
       } as ApiResponse);
+      return;
     }
 
     if (!roles.includes(req.user.role)) {
-      return res.status(403).json({
+      res.status(403).json({
         success: false,
         error: 'Insufficient permissions'
       } as ApiResponse);
+      return;
     }
 
     next();

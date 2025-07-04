@@ -14,11 +14,15 @@ const drivers: any[] = [];
 // Register endpoint
 router.post('/register', [
   body('email').isEmail().normalizeEmail(),
-  body('password').isLength({ min: 6 }),
+  body('password')
+    .isLength({ min: 8 })
+    .withMessage('Password must be at least 8 characters long')
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
+    .withMessage('Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character'),
   body('role').isIn(['driver', 'admin', 'dispatcher']),
-  body('firstName').notEmpty().trim(),
-  body('lastName').notEmpty().trim()
-], async (req, res) => {
+  body('firstName').notEmpty().trim().escape(),
+  body('lastName').notEmpty().trim().escape()
+], async (req: any, res: any) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({
@@ -78,9 +82,17 @@ router.post('/register', [
   }
 
   // Generate JWT token
+  const jwtSecret = process.env.JWT_SECRET;
+  if (!jwtSecret) {
+    return res.status(500).json({
+      success: false,
+      error: 'Server configuration error'
+    } as ApiResponse);
+  }
+
   const token = jwt.sign(
     { id: user.id, email: user.email, role: user.role },
-    process.env.JWT_SECRET || 'fallback-secret',
+    jwtSecret,
     { expiresIn: '7d' }
   );
 
@@ -102,7 +114,7 @@ router.post('/register', [
 router.post('/login', [
   body('email').isEmail().normalizeEmail(),
   body('password').notEmpty()
-], async (req, res) => {
+], async (req: any, res: any) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({
@@ -141,9 +153,17 @@ router.post('/login', [
   }
 
   // Generate JWT token
+  const jwtSecret = process.env.JWT_SECRET;
+  if (!jwtSecret) {
+    return res.status(500).json({
+      success: false,
+      error: 'Server configuration error'
+    } as ApiResponse);
+  }
+
   const token = jwt.sign(
     { id: user.id, email: user.email, role: user.role },
-    process.env.JWT_SECRET || 'fallback-secret',
+    jwtSecret,
     { expiresIn: '7d' }
   );
 
@@ -162,7 +182,7 @@ router.post('/login', [
 });
 
 // Get current user profile
-router.get('/me', authenticateToken, (req: any, res) => {
+router.get('/me', authenticateToken, (req: any, res: any) => {
   const user = users.find(u => u.id === req.user.id);
   if (!user) {
     return res.status(404).json({
@@ -193,10 +213,18 @@ router.get('/me', authenticateToken, (req: any, res) => {
 });
 
 // Refresh token endpoint
-router.post('/refresh', authenticateToken, (req: any, res) => {
+router.post('/refresh', authenticateToken, (req: any, res: any) => {
+  const jwtSecret = process.env.JWT_SECRET;
+  if (!jwtSecret) {
+    return res.status(500).json({
+      success: false,
+      error: 'Server configuration error'
+    } as ApiResponse);
+  }
+
   const token = jwt.sign(
     { id: req.user.id, email: req.user.email, role: req.user.role },
-    process.env.JWT_SECRET || 'fallback-secret',
+    jwtSecret,
     { expiresIn: '7d' }
   );
 
