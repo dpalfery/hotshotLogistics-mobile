@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { body, query, validationResult } from 'express-validator';
 import { authenticateToken, requireDriverOrAdmin } from '../middleware/auth';
+import { validateResourceOwnership, sanitizeInput, checkOperationRateLimit } from '../middleware/security';
 import { ApiResponse, PaginatedResponse } from '../types';
 import { Job, JobStatus, JobPriority, CargoType, CreateJobRequest, UpdateJobRequest, JobSearchFilters } from '../types/job';
 import { NotFoundError } from '../middleware/errorHandler';
@@ -310,7 +311,16 @@ router.patch('/:id', [
 });
 
 // Accept job (driver only)
-router.post('/:id/accept', authenticateToken, (req: any, res) => {
+router.post('/:id/accept', authenticateToken, (req: any, res: any) => {
+  // Rate limiting for job acceptance
+  const rateLimitKey = `job_accept_${req.user.id}`;
+  if (!checkOperationRateLimit(rateLimitKey, 5, 300000)) { // 5 accepts per 5 minutes
+    return res.status(429).json({
+      success: false,
+      error: 'Too many job acceptance attempts. Please wait before trying again.'
+    } as ApiResponse);
+  }
+
   if (req.user.role !== 'driver') {
     return res.status(403).json({
       success: false,
@@ -322,6 +332,14 @@ router.post('/:id/accept', authenticateToken, (req: any, res) => {
   
   if (!job) {
     throw new NotFoundError('Job not found');
+  }
+
+  // Validate job access
+  if (!validateResourceOwnership.checkJobAccess(job, req.user.id, req.user.role)) {
+    return res.status(403).json({
+      success: false,
+      error: 'Access denied to this job'
+    } as ApiResponse);
   }
 
   if (job.tracking.currentStatus !== 'available') {
@@ -438,8 +456,8 @@ router.post('/:id/documents', [
     throw new NotFoundError('Job not found');
   }
 
-  // Only assigned driver can upload documents
-  if (job.driverId !== req.user.id) {
+  // Validate document access
+  if (!validateResourceOwnership.checkJobDocumentAccess(job, req.user.id, req.user.role)) {
     return res.status(403).json({
       success: false,
       error: 'You can only upload documents for your assigned jobs'
@@ -447,6 +465,37 @@ router.post('/:id/documents', [
   }
 
   const { photos, signature, billOfLading, proofOfDelivery, damageReport } = req.body;
+
+  // Validate document content and sizes
+  if (photos && Array.isArray(photos)) {
+    if (photos.length > 10) {
+      return res.status(400).json({
+        success: false,
+        error: 'Maximum 10 photos allowed'
+      } as ApiResponse);
+    }
+    
+    // Check if photos are base64 strings with reasonable size limits
+    for (const photo of photos) {
+      if (typeof photo !== 'string' || photo.length > 5 * 1024 * 1024) { // 5MB limit
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid photo format or size too large'
+        } as ApiResponse);
+      }
+    }
+  }
+
+  // Validate other document types
+  const documentFields = { signature, billOfLading, proofOfDelivery, damageReport };
+  for (const [field, value] of Object.entries(documentFields)) {
+    if (value && (typeof value !== 'string' || value.length > 2 * 1024 * 1024)) { // 2MB limit
+      return res.status(400).json({
+        success: false,
+        error: `Invalid ${field} format or size too large`
+      } as ApiResponse);
+    }
+  }
 
   // Update documents
   if (photos) {
