@@ -1,37 +1,87 @@
-import React, { useState } from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  ScrollView, 
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
   TouchableOpacity,
   RefreshControl,
-  Alert 
+  Alert,
+  ActivityIndicator
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Search, Filter, Bell } from 'lucide-react-native';
 import JobCard from '@/components/JobCard';
-import { mockJobs } from '@/data/mockJobs';
-import { Job } from '@/types/job';
+import { LegacyJob } from '@/types/job';
+import { jobService } from '@/services/jobService';
+import { JobStatus, JobPriority, JobQueryParams } from '@/types/api';
+import { mapApiJobsToLegacy, mapLegacyPriorityToApi } from '@/utils/mappers';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function JobsScreen() {
-  const [jobs, setJobs] = useState<Job[]>(mockJobs);
+  const { isAuthenticated } = useAuth();
+  const [jobs, setJobs] = useState<LegacyJob[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'urgent' | 'high' | 'medium' | 'low'>('all');
 
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    // Simulate API call
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 1000);
-  }, []);
+  /**
+   * Load jobs from API
+   */
+  const loadJobs = async (showLoader: boolean = true) => {
+    try {
+      if (showLoader) {
+        setIsLoading(true);
+      }
 
-  const filteredJobs = filter === 'all' 
-    ? jobs 
+      const params: JobQueryParams = {
+        status: JobStatus.Pending,
+        pageSize: 50,
+        sortBy: 'ScheduledPickupTime',
+      };
+
+      if (filter !== 'all') {
+        params.priority = mapLegacyPriorityToApi(filter as any);
+      }
+
+      const response = await jobService.getJobs(params);
+
+      if (response.ok && response.data?.items) {
+        const legacyJobs = mapApiJobsToLegacy(response.data.items);
+        setJobs(legacyJobs);
+      } else {
+        console.error('Failed to load jobs:', response.error);
+        if (showLoader) {
+          Alert.alert('Error', 'Failed to load jobs. Please try again.');
+        }
+      }
+    } catch (error) {
+      console.error('Error loading jobs:', error);
+      if (showLoader) {
+        Alert.alert('Error', 'An unexpected error occurred while loading jobs.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadJobs();
+    }
+  }, [isAuthenticated, filter]);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await loadJobs(false);
+    setRefreshing(false);
+  }, [filter]);
+
+  const filteredJobs = filter === 'all'
+    ? jobs
     : jobs.filter(job => job.priority === filter);
 
-  const handleJobPress = (job: Job) => {
+  const handleJobPress = async (job: LegacyJob) => {
     Alert.alert(
       'Job Details',
       `Would you like to accept this job?\n\n${job.title}\nRate: $${job.rate}\nDistance: ${job.distance} miles`,
@@ -43,12 +93,33 @@ export default function JobsScreen() {
         {
           text: 'Accept Job',
           style: 'default',
-          onPress: () => {
-            Alert.alert('Job Accepted!', 'You will receive pickup instructions shortly.');
-          },
+          onPress: () => acceptJob(job.id),
         },
       ]
     );
+  };
+
+  const acceptJob = async (jobId: string) => {
+    try {
+      const response = await jobService.assignDriver(jobId, {
+        driverId: 1,
+      });
+
+      if (response.ok) {
+        Alert.alert('Success', 'Job accepted! You will receive pickup instructions shortly.');
+        await loadJobs(false);
+      } else {
+        Alert.alert('Error', 'Failed to accept job. It may have already been assigned to another driver.');
+      }
+    } catch (error) {
+      console.error('Error accepting job:', error);
+      Alert.alert('Error', 'An unexpected error occurred. Please try again.');
+    }
+  };
+
+  const getJobCount = (priority: typeof filter): number => {
+    if (priority === 'all') return jobs.length;
+    return jobs.filter(j => j.priority === priority).length;
   };
 
   const FilterButton = ({ 
@@ -76,6 +147,22 @@ export default function JobsScreen() {
     </TouchableOpacity>
   );
 
+  if (isLoading && !refreshing) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <View style={styles.headerTop}>
+            <Text style={styles.headerTitle}>Available Jobs</Text>
+          </View>
+        </View>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#2563EB" />
+          <Text style={styles.loadingText}>Loading jobs...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -86,7 +173,7 @@ export default function JobsScreen() {
             <View style={styles.notificationBadge} />
           </TouchableOpacity>
         </View>
-        
+
         <View style={styles.searchContainer}>
           <View style={styles.searchBar}>
             <Search size={20} color="#6B7280" />
@@ -97,36 +184,36 @@ export default function JobsScreen() {
           </TouchableOpacity>
         </View>
 
-        <ScrollView 
-          horizontal 
+        <ScrollView
+          horizontal
           showsHorizontalScrollIndicator={false}
           style={styles.filterContainer}
           contentContainerStyle={styles.filterContent}
         >
-          <FilterButton 
-            label="All" 
-            value="all" 
-            count={jobs.length} 
+          <FilterButton
+            label="All"
+            value="all"
+            count={getJobCount('all')}
           />
-          <FilterButton 
-            label="Urgent" 
-            value="urgent" 
-            count={jobs.filter(j => j.priority === 'urgent').length} 
+          <FilterButton
+            label="Urgent"
+            value="urgent"
+            count={getJobCount('urgent')}
           />
-          <FilterButton 
-            label="High" 
-            value="high" 
-            count={jobs.filter(j => j.priority === 'high').length} 
+          <FilterButton
+            label="High"
+            value="high"
+            count={getJobCount('high')}
           />
-          <FilterButton 
-            label="Medium" 
-            value="medium" 
-            count={jobs.filter(j => j.priority === 'medium').length} 
+          <FilterButton
+            label="Medium"
+            value="medium"
+            count={getJobCount('medium')}
           />
-          <FilterButton 
-            label="Low" 
-            value="low" 
-            count={jobs.filter(j => j.priority === 'low').length} 
+          <FilterButton
+            label="Low"
+            value="low"
+            count={getJobCount('low')}
           />
         </ScrollView>
       </View>
@@ -142,7 +229,9 @@ export default function JobsScreen() {
           <View style={styles.emptyState}>
             <Text style={styles.emptyStateTitle}>No jobs available</Text>
             <Text style={styles.emptyStateText}>
-              Check back later or adjust your filters
+              {filter === 'all'
+                ? 'Check back later for new jobs'
+                : 'No jobs match the selected filter. Try adjusting your filters.'}
             </Text>
           </View>
         ) : (
@@ -248,6 +337,17 @@ const styles = StyleSheet.create({
   },
   jobsList: {
     flex: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 14,
+    fontFamily: 'Inter-Medium',
+    color: '#6B7280',
+    marginTop: 12,
   },
   emptyState: {
     alignItems: 'center',
